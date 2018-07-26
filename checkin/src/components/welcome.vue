@@ -68,6 +68,7 @@ export default {
       axios.post('http://localhost:3030/user/add', newUser)
         .then((response) => {
           console.log(response.data)
+          window.location = 'http://localhost:8080/#/checkin'
         })
         .catch((error) => {
           console.log(error)
