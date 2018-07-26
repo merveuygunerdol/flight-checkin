@@ -4,7 +4,7 @@
       <h1> {{ msg }} </h1>
       <b-row>
         <b-col sm></b-col>
-        <b-col sm><b-form @submit="onSubmit" @reset="onReset" v-if="show">
+        <b-col sm><b-form @submit="onSubmit" v-if="show">
         <b-form-group id="exampleInputGroup2"
                       label="Your Name:"
                       label-for="exampleInput2">
@@ -43,6 +43,8 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from 'axios'
+
 export default {
   data () {
     return {
@@ -58,7 +60,18 @@ export default {
   methods: {
     onSubmit (evt) {
       evt.preventDefault()
-      alert(JSON.stringify(this.form))
+      let newUser = {
+        fullname: this.form.name,
+        email: this.form.email
+      }
+      console.log(newUser)
+      axios.post('http://localhost:3030/user/add', newUser)
+        .then((response) => {
+          console.log(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }
 }
