@@ -27,11 +27,15 @@
           </b-form-input>
         </b-form-group>
         <b-form-group id="exampleGroup4">
-          <b-form-checkbox-group v-model="form.checked" id="exampleChecks">
-            <b-form-checkbox value="me"> I am accepting check-in agreement </b-form-checkbox>
+          <b-form-checkbox-group  id="exampleChecks">
+            <b-form-checkbox id="checkbox1"
+                            v-model="status"
+                            value="checked">
+                  I accept terms and conditions
+            </b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
-        <b-button type="submit" variant="primary">Continue</b-button>
+        <b-button :disabled="status[0] != 'checked'" type="submit" variant="primary">Continue</b-button>
       </b-form>
       </b-col>
       <b-col sm></b-col>
@@ -51,10 +55,10 @@ export default {
       msg: 'Welcome to HelloAirlines Check-in Service',
       form: {
         email: '',
-        name: '',
-        checked: []
+        name: ''
       },
-      show: true
+      show: true,
+      status: ['unchecked']
     }
   },
   methods: {
