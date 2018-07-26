@@ -23,15 +23,18 @@
                     </b-col>
                 </span>
                 <b-col sm>
-                  <b-button class="gon" variant="success">Check-out</b-button>
-                  <b-button class="gon">Continue without selecting seat</b-button>
-                    </b-col>
+                  <h2>Welcome</h2>
+                  <h3>{{name}}</h3>
+                    <b-button class="gon" variant="success">Check-out</b-button>
+                    <b-button class="gon">Continue without selecting seat</b-button>
+                </b-col>
             </b-row>
         </b-container>
     </div>
 </template>
 
 <script>
+import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 export default {
@@ -42,8 +45,13 @@ export default {
       msg: 'Select a Seat...',
       fixedprice: 8,
       totalprice: 0,
-      seatprice: 0
+      seatprice: 0,
+      name: '',
+      email: ''
     }
+  },
+  created () {
+    this.fetchUser()
   },
   methods: {
     selectSeat (seat) {
@@ -59,6 +67,15 @@ export default {
       this.seat = seat[0] + '-' + seat[1]
       this.msg = 'Selected Seat'
       this.totalprice = this.seatprice + this.fixedprice
+    },
+    fetchUser () {
+      axios.get('http://localhost:3030/user/fetch')
+        .then(response => {
+          this.name = response.data.name
+        })
+        .catch(e => {
+          this.errors.push(e)
+        })
     }
   }
 }
