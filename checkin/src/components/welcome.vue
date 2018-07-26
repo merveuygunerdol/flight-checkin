@@ -4,13 +4,13 @@
       <h1> {{ msg }} </h1>
       <b-row>
         <b-col sm></b-col>
-        <b-col sm><b-form @submit="onSubmit" v-if="show">
+        <b-col sm><b-form @submit="Send" v-if="show">
         <b-form-group id="exampleInputGroup2"
                       label="Your Name:"
                       label-for="exampleInput2">
           <b-form-input id="exampleInput2"
                         type="text"
-                        v-model="form.name"
+                        v-model="name"
                         required
                         placeholder="Enter name">
           </b-form-input>
@@ -21,7 +21,7 @@
                       description="We'll never share your email with anyone else.">
           <b-form-input id="exampleInput1"
                         type="email"
-                        v-model="form.email"
+                        v-model="email"
                         required
                         placeholder="Enter email">
           </b-form-input>
@@ -47,36 +47,26 @@
 <script>
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import axios from 'axios'
 
 export default {
   data () {
     return {
       msg: 'Welcome to HelloAirlines Check-in Service',
-      form: {
-        email: '',
-        name: ''
-      },
+      email: '',
+      name: '',
       show: true,
       status: ['unchecked']
     }
   },
   methods: {
-    onSubmit (evt) {
+    Send (evt) {
       evt.preventDefault()
       let newUser = {
-        fullname: this.form.name,
-        email: this.form.email
+        fullname: this.name,
+        email: this.email
       }
       console.log(newUser)
-      axios.post('http://localhost:3030/user/add', newUser)
-        .then((response) => {
-          console.log(response.data)
-          window.location = 'http://localhost:8080/#/checkin'
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+      this.$store.dispatch('onSubmit', newUser)
     }
   }
 }

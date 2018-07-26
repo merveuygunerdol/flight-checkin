@@ -4,31 +4,31 @@
       <b-row>
         <b-col sm>
           {{msg}}<h1>{{seat}}</h1>
-          Seat Price <h1>{{seatprice}} €</h1>
-          Check-in Price<h1>{{fixedprice}} €</h1>
-          Total Price<h1>{{totalprice}} €</h1>
+          Seat Price <h1>{{seatPrice}} €</h1>
+          Check-in Price<h1>{{fixedPrice}} €</h1>
+          Total Price<h1>{{totalPrice}} €</h1>
         </b-col>
         <span class="rowNumber" v-for="seats in 12" :key="seats">
           <span class="rowLetter" v-if="seats % 4 !== 0">{{Seats[seats-1]}}</span>
             <b-col v-if="seats % 4 == 0" sm>
-              <span v-if="seats == 12" v-for="n in 21" :key="n">
-                <span class="rowLetter" v-if="n != 0"  :key="n">
-                  {{n-1}}<br>
+              <span v-if="seats == 12" v-for="seat in 21" :key="seat">
+                <span class="rowLetter" v-if="seat != 0"  :key="seat">
+                  {{seat-1}}<br>
                 </span>
               </span>
             </b-col>
             <b-col sm v-else>
-              <span v-for="n in 20" :key="n">
-                <button v-if="clicked_button == Seats[seats-1]+n" v-bind:class="{button_clicked: isActive}" :disabled="disablebutton" class="button" @click="selectSeat(Seats[seats-1]+n)"></button>
-                <button v-else :disabled="disablebutton" class="button" @click="selectSeat(Seats[seats-1]+n)"></button><br>
+              <span v-for="seat in 20" :key="seat">
+                <button v-if="clickedButton == Seats[seats-1]+seat" v-bind:class="{button_clicked: isActive}" :disabled="disablebutton" class="button" @click="selectSeat(Seats[seats-1]+seat)"></button>
+                <button v-else :disabled="disablebutton" class="button" @click="selectSeat(Seats[seats-1]+seat)"></button><br>
               </span>
             </b-col>
         </span>
         <b-col sm>
           <h2>Welcome</h2>
-          <h3>{{name}}</h3>
+          <h3>{{ user }}</h3>
             Time Left to Check-out<h3>{{minute}}.{{second}}</h3>
-              <b-button v-if="checkout_button" class="button_space" variant="success">Check-out</b-button>
+              <!-- <b-button v-if="checkout_button" class="button_space" variant="success">Check-out</b-button> -->
               <b-button class="button_space" :disabled="disablebutton" @click="random">Continue without selecting seat</b-button>
         </b-col>
       </b-row>
@@ -44,42 +44,63 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { mapState, mapActions } from 'vuex'
+
 export default {
   data () {
     return {
-      Seats: ['A', 'B', 'C', ' ', 'D', 'E', 'F', ' ', 'G', 'H', 'I'],
-      seat: '',
-      msg: 'Select a Seat...',
-      fixedprice: 8,
-      totalprice: 0,
-      seatprice: 0,
       name: '',
+      selectedSeat: '',
       email: '',
       second: 0,
       minute: 3,
-      clicked_button: '',
-      i: 0,
-      checkout_button: false,
-      isActive: false,
+      duration: 0,
+      // checkout_button: false,
       disablebutton: false
     }
   },
-  created () {
-    this.fetchUser()
+  mounted () {
+    this.$store.dispatch('fetchUser')
+  },
+  computed: {
+    ...mapState([
+      'msg',
+      'fixedPrice',
+      'Seats',
+      'seat',
+      'seatPrice',
+      'totalPrice',
+      'clickedButton',
+      'isActive',
+      'activeModal',
+      'user'
+    ])
+  },
+  watch: {
+    activeModal (show, hide) {
+      if (hide) {
+        this.$refs.myModalRef.hide()
+      }
+      if (!show) return
+      this.$refs.myModalRef.show()
+    }
   },
   methods: {
+    ...mapActions([
+      'selectSeat'
+    ]),
     startTimer () {
       this.checkout_button = true
-      this.i = 0
+      this.duration = 0
       this.disablebutton = true
       this.$refs.myModalRef.hide()
       setInterval(this.timer, 1000)
     },
     timer () {
-      if (this.i < 180) {
+      if (this.duration < 180) {
         if (this.second == 0) {
           this.minute = this.minute - 1
           this.second = 59
@@ -87,71 +108,39 @@ export default {
             this.minute = 2
             this.second = 59
           }
-          this.i++
+          this.duration++
         } else {
           this.second -= 1
-          this.i++
+          this.duration++
         }
       } else {
         this.disablebutton = false
-        this.second = 59
-        this.minute = 2
+        this.second = 0
+        this.minute = 3
         this.isActive = true
+        window.location.reload()
       }
-    },
-    selectSeat (seat) {
-      console.log(seat)
-      this.clicked_button = seat
-      this.isActive = true
-      this.showModal()
-      if (seat[0] == 'A' || seat[0] == 'I') {
-        this.seatprice = 10
-      }
-      if (seat[0] == 'C' || seat[0] == 'D' || seat[0] == 'F' || seat[0] == 'G') {
-        this.seatprice = 8
-      }
-      if (seat[0] == 'B' || seat[0] == 'E' || seat[0] == 'H') {
-        this.seatprice = 5
-      }
-      if (seat[2]) {
-        this.seat = seat[0] + '-' + seat[1] + seat[2]
-      } else {
-        this.seat = seat[0] + '-' + seat[1]
-      }
-      this.msg = 'Selected Seat'
-      this.fixedprice = 8
-      this.totalprice = this.seatprice + this.fixedprice
-    },
-    fetchUser () {
-      axios.get('http://localhost:3030/user/fetch')
-        .then(response => {
-          this.name = response.data.name
-        })
-        .catch(e => {
-          this.errors.push(e)
-        })
     },
     random () {
       let ran1 = Math.floor(Math.random() * (7 - 1 + 1)) + 1
       let ran2 = Math.floor(Math.random() * (20 - 1 + 1)) + 1
-      if (ran1 !== 3 && ran1 !== 7) {
-        this.seat = this.Seats[ran1] + ran2
-        this.selectSeat(this.seat)
-        this.fixedprice = 0
-        this.seatprice = 0
-        this.totalprice = 0
+      let randomNums = [ran1, ran2]
+      if (randomNums[0] !== 3 && randomNums[1] !== 7) {
+        this.$store.dispatch('changeData', randomNums)
+        this.startTimer()
       }
     },
     showModal () {
       this.$refs.myModalRef.show()
     },
     hideModal () {
-      this.isActive = false
-      this.seatprice = 0
-      this.fixedprice = 8
-      this.totalprice = 0
-      this.msg = 'Select a Seat...'
-      this.seat = ''
+      this.$store.state.isActive = false
+      this.$store.state.seatPrice = 0
+      this.$store.state.fixedPrice = 8
+      this.$store.state.totalPrice = 0
+      this.$store.state.msg = 'Select a Seat...'
+      this.$store.state.seat = ''
+      this.$store.state.activeModal = false
       this.$refs.myModalRef.hide()
     }
   }
