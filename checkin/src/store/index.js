@@ -15,17 +15,15 @@ const router = new VueRouter({
 const state = {
   msg: 'Select a Seat...',
   fixedPrice: 8,
-  seatsList: {
-    'A': ['A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'A11', 'A12', 'A13', 'A14', 'A15', 'A16', 'A17', 'A18', 'A19', 'A20'],
-    'B': ['B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'B11', 'B12', 'B13', 'B14', 'B15', 'B16', 'B17', 'B18', 'B19', 'B20'],
-    'C': ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C19', 'C20'],
-    'D': ['D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'D16', 'D17', 'D18', 'D19', 'D20'],
-    'E': ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9', 'E10', 'E11', 'E12', 'E13', 'E14', 'E15', 'E16', 'E17', 'E18', 'E19', 'E20'],
-    'F': ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12', 'F13', 'F14', 'F15', 'F16', 'F17', 'F18', 'F19', 'F20'],
-    'G': ['G1', 'G2', 'G3', 'G4', 'G5', 'G6', 'G7', 'G8', 'G9', 'G10', 'G11', 'G12', 'G13', 'G14', 'G15', 'G16', 'G17', 'G18', 'G19', 'G20'],
-    'H': ['H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'H7', 'H8', 'H9', 'H10', 'H11', 'H12', 'H13', 'H14', 'H15', 'H16', 'H17', 'H18', 'H19', 'H20'],
-    'I': ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12', 'I13', 'I14', 'I15', 'I16', 'I17', 'I18', 'I19', 'I20']
-  },
+  seatsList: [
+    ['1A', '2A', '3A', '4A', '5A', '6A', '7A', '8A', '9A', '10A', '11A', '12A', '13A', '14A', '15A'],
+    ['1B', '2B', '3B', '4B', '5B', '6B', '7B', '8B', '9B', '10B', '11B', '12B', '13B', '14B', '15B'],
+    ['1C', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', '10C', '11C', '12C', '13C', '14C', '15C'],
+    ['empty-column'],
+    ['1D', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', '10D', '11D', '12D', '13D', '14D', '15D'],
+    ['1E', '2E', '3E', '4E', '5E', '6E', '7E', '8E', '9E', '10E', '11E', '12E', '13E', '14E', '15E'],
+    ['1F', '2F', '3F', '4F', '5F', '6F', '7F', '8F', '9F', '10F', '11F', '12F', '13F', '14F', '15F']
+  ],
   rows: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'],
   seatPrice: 0,
   totalPrice: 0,
@@ -33,71 +31,86 @@ const state = {
   isActive: false,
   activeModal: false,
   user: '',
-  randomNums: []
+  randomNums: [],
+  seat: ''
 }
 
 const getters = {}
 
+const Methods = {
+  SET_BUTTON: 'SET_BUTTON',
+  SET_TOTALPRICE: 'SET_TOTALPRICE',
+  SET_MSG: 'SET_MSG',
+  SET_SEATPRICE: 'SET_SEATPRICE',
+  SET_SEAT: 'SET_SEAT',
+  SET_USER: 'SET_USER',
+  SET_FIXEDPRICE: 'SET_FIXEDPRICE',
+  SET_MODAL: 'SET_MODAL',
+  SET_RANDOMSEAT: 'SET_RANDOMSEAT',
+  SET_ACTIVITY: 'SET_ACTIVITY',
+  SET_RANDOMNUMS: 'SET_RANDOMNUMS'
+}
+
 const mutations = {
-  SET_SEAT (state, selectedSeat) {
-    state.seat = selectedSeat
+  [Methods.SET_RANDOMNUMS] (state, nums) {
+    state.randomNums = [nums[0], nums[1]]
   },
-  SET_USER (state, user) {
-    state.user = user
+  [Methods.SET_BUTTON] (state, button) {
+    state.clickedButton = button
   },
-  SET_SEATPRICE (state, seatp) {
-    state.seatPrice = seatp
-  },
-  SET_FIXEDPRICE (state, fixedp) {
-    state.fixedPrice = fixedp
-  },
-  SET_TOTALPRICE (state, totalp) {
+  [Methods.SET_TOTALPRICE] (state, totalp) {
     state.totalPrice = totalp
   },
-  SET_MSG (state, msg) {
+  [Methods.SET_MSG] (state, msg) {
     state.msg = msg
   },
-  SET_MODAL (state, status) {
+  [Methods.SET_SEATPRICE] (state, seatp) {
+    state.seatPrice = seatp
+  },
+  [Methods.SET_SEAT] (state, selectedSeat) {
+    state.seat = selectedSeat
+  },
+  [Methods.SET_USER] (state, user) {
+    state.user = user
+  },
+  [Methods.SET_FIXEDPRICE] (state, fixedPrice) {
+    state.fixedPrice = fixedPrice
+  },
+  [Methods.SET_MODAL] (state, status) {
     state.activeModal = status
   },
-  SET_RANDOMSEAT (state, seat) {
+  [Methods.SET_RANDOMSEAT] (state, seat) {
     state.seat = seat
     state.fixedPrice = 0
     state.seatPrice = 0
     state.totalPrice = 0
     state.msg = 'Selected Seat:'
   },
-  SET_ACTIVITY (state, status) {
+  [Methods.SET_ACTIVITY] (state, status) {
     state.isActive = status
-  },
-  SET_RANDOMNUMS (state, nums) {
-    state.randomNums = [nums[0], nums[1]]
-  },
-  SET_BUTTON (state, button) {
-    state.clickedButton = button
   }
 }
 const actions = {
   selectSeat ({commit}, selectedSeat) {
-    commit('SET_ACTIVITY', true)
-    commit('SET_BUTTON', selectedSeat)
-    if (selectedSeat[0] == 'A' || selectedSeat[0] == 'I') {
-      commit('SET_SEATPRICE', 10)
+    commit(Methods.SET_ACTIVITY, true)
+    commit(Methods.SET_BUTTON, selectedSeat)
+    if (selectedSeat[1] == 'A' || selectedSeat[1] == 'I') {
+      commit(Methods.SET_SEATPRICE, 10)
     }
-    if (selectedSeat[0] == 'C' || selectedSeat[0] == 'D' || selectedSeat[0] == 'F' || selectedSeat[0] == 'G') {
-      commit('SET_SEATPRICE', 8)
+    if (selectedSeat[1] == 'C' || selectedSeat[1] == 'D' || selectedSeat[1] == 'F' || selectedSeat[0] == 'G') {
+      commit(Methods.SET_SEATPRICE, 8)
     }
-    if (selectedSeat[0] == 'B' || selectedSeat[0] == 'E' || selectedSeat[0] == 'H') {
-      commit('SET_SEATPRICE', 5)
+    if (selectedSeat[1] == 'B' || selectedSeat[1] == 'E' || selectedSeat[1] == 'H') {
+      commit(Methods.SET_SEATPRICE, 5)
     }
     if (selectedSeat[2]) {
-      commit('SET_SEAT', selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2])
+      commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2])
     } else {
-      commit('SET_SEAT', selectedSeat[0] + '-' + selectedSeat[1])
+      commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1])
     }
-    commit('SET_TOTALPRICE', state.seatPrice + state.fixedPrice)
-    commit('SET_MSG', 'Selected Seat:')
-    commit('SET_MODAL', true)
+    commit(Methods.SET_TOTALPRICE, state.seatPrice + state.fixedPrice)
+    commit(Methods.SET_MSG, 'Selected Seat:')
+    commit(Methods.SET_MODAL, true)
   },
   fetchUser ({ commit }) {
     axios.get('http://localhost:3030/user/fetch')
@@ -125,11 +138,11 @@ const actions = {
   randomNumbers ({ commit }) {
     let ran1 = Math.floor(Math.random() * (7 - 1 + 1)) + 1
     let ran2 = Math.floor(Math.random() * (20 - 1 + 1)) + 1
-    commit('SET_RANDOMNUMS', [ran1, ran2])
+    commit(Methods.SET_RANDOMNUMS, [ran1, ran2])
   },
   randomSeat ({ commit }, randomNums) {
     let letter = state.rows[state.randomNums[0]]
-    commit('SET_RANDOMSEAT', letter + '-' + state.randomNums[1])
+    commit(Methods.SET_RANDOMSEAT, letter + '-' + state.randomNums[1])
     this.disablebutton = true
   },
   changeData ({ commit }, data) {

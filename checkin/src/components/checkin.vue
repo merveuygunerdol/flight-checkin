@@ -3,15 +3,20 @@
     <b-container>
       <b-row>
         <b-col sm>
-          {{msg}}<h1>{{$store.state.seat}}</h1>
+          {{msg}}<h1>{{seat}}</h1>
           Seat Price <h1>{{seatPrice}} €</h1>
           Check-in Price<h1>{{fixedPrice}} €</h1>
           Total Price<h1>{{totalPrice}} €</h1>
         </b-col>
-        <span class="rowNumber" v-for="(seats, row) in seatsList" :key="row">
-          {{row}}<br>
-          <span class="rowNumber" v-for="seat in seats" :key="seat">
-            <button :disabled="disablebutton" @click="selectSeat(seat)">{{seat[1]}}</button><br>
+        <span class="rowNumber" v-for="(seats, index) in seatsList" :key="index"> <br>
+          <span v-if="seats != 'empty-column'">
+            {{seats[0][1]}}<br>
+              <span class="rowNumber" v-for="seat in seats" :key="seat">
+                <button class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat[1]}}</button><br>
+              </span>
+          </span>
+            <span v-else>
+              <b-col></b-col>
             </span>
         </span>
         <b-col sm>
@@ -25,7 +30,7 @@
     </b-container>
     <b-modal ref="myModalRef" hide-footer title="Pick This Seat">
         <div class="d-block text-center">
-          <h3>Are you sure to select {{$store.state.seat}}?</h3>
+          <h3>Are you sure to select {{seat}}?</h3>
         </div>
         <b-btn class="mt-3" variant="outline-danger" block @click="hideModal">NO</b-btn>
         <b-btn z variant="outline-success" block @click="startTimer">YES</b-btn>
@@ -66,7 +71,8 @@ export default {
       'clickedButton',
       'isActive',
       'activeModal',
-      'user'
+      'user',
+      'seat'
     ])
   },
   watch: {
@@ -151,8 +157,11 @@ export default {
 .button {
   background-color: rgb(179, 184, 189);
   border-radius: 3px;
-  height: 1em;
-  width: 1em;
+  height: 25px;
+  width: 25px;
+  color:rgb(179, 184, 189);
+  margin: 8px 8px 0;
+  border-color: darkgrey
 }
 .button_clicked {
     background-color: rgb(199, 42, 120);
