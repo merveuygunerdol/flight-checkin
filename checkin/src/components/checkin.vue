@@ -8,17 +8,14 @@
           Check-in Price<h1>{{fixedPrice}} €</h1>
           Total Price<h1>{{totalPrice}} €</h1>
         </b-col>
-        <span class="rowNumber" v-for="(seats, index) in seatsList" :key="index"> <br>
-          <span v-if="seats != 'empty-column'">
-            {{seats[0][1]}}<br>
-              <span class="rowNumber" v-for="seat in seats" :key="seat">
-                <button class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat[1]}}</button><br>
-              </span>
-          </span>
-            <span v-else>
-              <b-col></b-col>
-            </span>
-        </span>
+        <div v-for="row in seatsList[1]" :key="row"> {{ row[1]}} <br></div>
+          <div v-for="(seats, index) in seatsList" :key="index">
+            <div v-if="seats != 'empty-column'"><br>
+              <div v-for="seat in seats" :key="seat">
+                <div class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat}}</div><br>
+              </div>
+            </div>
+          </div>
         <b-col sm>
           <h2>Welcome</h2>
           <h3>{{ user }}</h3>
@@ -159,9 +156,10 @@ export default {
   border-radius: 3px;
   height: 25px;
   width: 25px;
-  color:rgb(179, 184, 189);
+  color: white;
   margin: 8px 8px 0;
-  border-color: darkgrey
+  border-color: darkgrey;
+  display: inline-block
 }
 .button_clicked {
     background-color: rgb(199, 42, 120);
