@@ -3,19 +3,19 @@
     <b-container>
       <b-row>
         <b-col sm>
-          {{msg}}<h1>{{seat}}</h1>
-          Seat Price <h1>{{seatPrice}} €</h1>
-          Check-in Price<h1>{{fixedPrice}} €</h1>
-          Total Price<h1>{{totalPrice}} €</h1>
+            {{msg}}<h1>{{seat}}</h1>
+            Seat Price <h1>{{seatPrice}} €</h1>
+            Check-in Price<h1>{{fixedPrice}} €</h1>
+            Total Price<h1>{{totalPrice}} €</h1>
         </b-col>
-        <div v-for="row in seatsList[1]" :key="row"> {{ row[1]}} <br></div>
-          <div v-for="(seats, index) in seatsList" :key="index">
-            <div v-if="seats != 'empty-column'"><br>
-              <div v-for="seat in seats" :key="seat">
-                <div class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat}}</div><br>
+          <div v-for="row in seatsList[1]" :key="row"> {{ row[1]}} <br></div>
+            <div v-for="(seats, index) in seatsList" :key="index">
+              <div v-if="seats != 'empty-column'"><br>
+                <div v-for="seat in seats" :key="seat">
+                  <button v-bind:class="{button_hidden: seat == 'e'}"  class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat[0]}}{{seat[1]}}</button><br>
+                </div>
               </div>
             </div>
-          </div>
         <b-col sm>
           <h2>Welcome</h2>
           <h3>{{ user }}</h3>
@@ -37,8 +37,6 @@
 
 <script>
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -107,20 +105,15 @@ export default {
           this.duration++
         }
       } else {
-        this.disablebutton = false
-        this.second = 0
-        this.minute = 3
-        this.isActive = true
+        this.$store.dispatch('reload')
       }
     },
     random () {
       this.$store.dispatch('randomNumbers')
       console.log(this.$store.state.randomNums[1])
       console.log(this.$store.state.randomNums[0])
-      if (this.$store.state.randomNums[0] != 3 && this.$store.state.randomNums[0] != 7) {
-        this.$store.dispatch('randomSeat')
-        this.startTimer()
-      }
+      this.$store.dispatch('randomSeat')
+      this.startTimer()
     },
     showModal () {
       this.$refs.myModalRef.show()
@@ -144,6 +137,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.button_hidden {
+  visibility: hidden
+}
 .rowLetter {
     font-weight: 800;
     text-align: center;
@@ -158,8 +154,8 @@ export default {
   width: 25px;
   color: white;
   margin: 8px 8px 0;
-  border-color: darkgrey;
-  display: inline-block
+  border-color:darkgrey;
+  display: inline-block;
 }
 .button_clicked {
     background-color: rgb(199, 42, 120);

@@ -16,12 +16,12 @@ const state = {
   msg: 'Select a Seat...',
   fixedPrice: 8,
   seatsList: [
-    ['1A', '1B', '1C', '1D', '1E', '1F'],
-    ['2A', '2B', '2C', '2D', '2E', '2F'],
-    ['3A', '3B', '3C', '3D', '3E', '3F'],
-    ['4A', '4B', '4C', '4D', '4E', '4F'],
-    ['5A', '5B', '5C', '5D', '5E', '5F'],
-    ['6A', '6B', '6C', '6D', '6E', '6F']
+    ['1A', '1B', '1C', 'e', '1D', '1E', '1F'],
+    ['2A', '2B', '2C', 'e', '2D', '2E', '2F'],
+    ['3A', '3B', '3C', 'e', '3D', '3E', '3F'],
+    ['4A', '4B', '4C', 'e', '4D', '4E', '4F'],
+    ['5A', '5B', '5C', 'e', '5D', '5E', '5F'],
+    ['6A', '6B', '6C', 'e', '6D', '6E', '6F']
   ],
   cols: ['A', 'B', 'C', 'D', 'E', 'F'],
   seatPrice: 0,
@@ -93,13 +93,13 @@ const actions = {
   selectSeat ({commit}, selectedSeat) {
     commit(Methods.SET_ACTIVITY, true)
     commit(Methods.SET_BUTTON, selectedSeat)
-    if (selectedSeat[1] == 'A' || selectedSeat[1] == 'I') {
+    if (selectedSeat[1] == 'A' || selectedSeat[1] == 'F') {
       commit(Methods.SET_SEATPRICE, 10)
     }
-    if (selectedSeat[1] == 'C' || selectedSeat[1] == 'D' || selectedSeat[1] == 'F' || selectedSeat[0] == 'G') {
+    if (selectedSeat[1] == 'C' || selectedSeat[1] == 'D') {
       commit(Methods.SET_SEATPRICE, 8)
     }
-    if (selectedSeat[1] == 'B' || selectedSeat[1] == 'E' || selectedSeat[1] == 'H') {
+    if (selectedSeat[1] == 'B' || selectedSeat[1] == 'E') {
       commit(Methods.SET_SEATPRICE, 5)
     }
     if (selectedSeat[2]) {
@@ -110,6 +110,10 @@ const actions = {
     commit(Methods.SET_TOTALPRICE, state.seatPrice + state.fixedPrice)
     commit(Methods.SET_MSG, 'Selected Seat:')
     commit(Methods.SET_MODAL, true)
+  },
+  reload () {
+    router.push('checkin')
+    router.go('checkin')
   },
   fetchUser ({ commit }) {
     axios.get('http://localhost:3030/user/fetch')
@@ -126,8 +130,6 @@ const actions = {
     axios.post('http://localhost:3030/user/add', newUser)
       .then((response) => {
         console.log(response.data)
-        router.push('checkin')
-        router.go('checkin')
         commit('SET_ACTIVITY', false)
       })
       .catch((error) => {
@@ -135,13 +137,13 @@ const actions = {
       })
   },
   randomNumbers ({ commit }) {
-    let ran1 = Math.floor(Math.random() * (7 - 1 + 1)) + 1
-    let ran2 = Math.floor(Math.random() * (20 - 1 + 1)) + 1
+    let ran1 = Math.floor(Math.random() * (5 - 1 + 1)) + 1
+    let ran2 = Math.floor(Math.random() * (5 - 0 + 1)) + 1
     commit(Methods.SET_RANDOMNUMS, [ran1, ran2])
   },
   randomSeat ({ commit }, randomNums) {
     let letter = state.cols[state.randomNums[0]]
-    commit(Methods.SET_RANDOMSEAT, letter + '-' + state.randomNums[1])
+    commit(Methods.SET_RANDOMSEAT, state.randomNums[1] + '-' + letter)
     this.disablebutton = true
   },
   changeData ({ commit }, data) {
