@@ -1,37 +1,31 @@
 <template>
-  <div>
-    <b-container>
-      <b-row>
-        <b-col sm>
-            {{msg}}<h1>{{seat}}</h1>
-            Seat Price <h1>{{seatPrice}} €</h1>
-            Check-in Price<h1>{{fixedPrice}} €</h1>
-            Total Price<h1>{{totalPrice}} €</h1>
-        </b-col>
-          <div v-for="row in seatsList[1]" :key="row"> {{ row[1]}} <br></div>
-            <div v-for="(seats, index) in seatsList" :key="index">
-              <div v-if="seats != 'empty-column'"><br>
-                <div v-for="seat in seats" :key="seat">
-                  <button v-bind:class="{button_hidden: seat == 'e'}"  class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat[0]}}{{seat[1]}}</button><br>
-                </div>
-              </div>
-            </div>
-        <b-col sm>
-          <h2>Welcome</h2>
-          <h3>{{ user }}</h3>
-            Time Left to Check-out<h3>{{minute}}.{{second}}</h3>
-              <!-- <b-button v-if="checkout_button" class="button_space" variant="success">Check-out</b-button> -->
-              <b-button class="button_space" :disabled="disablebutton" @click="random">Continue without selecting seat</b-button>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-modal ref="myModalRef" hide-footer title="Pick This Seat">
-        <div class="d-block text-center">
-          <h3>Are you sure to select {{seat}}?</h3>
+  <div class="main">
+    <div class="header">
+      <img src="../assets/airline.png">
+      <h1 class="header_h1">Welcome to HelloAirlines Checkin Service! </h1>
+    </div>
+    <div class="row">
+      <div class="column side">
+        <h2>{{msg}} {{seat}}</h2>
+        <span class="bold">Seat Price: </span>{{seatPrice}} €<br>
+        <span class="bold">Check-in Price: </span> {{fixedPrice}} €<br>
+        <span class="bold">Total Price: </span>{{totalPrice}} €<br>
+        <div>
+          <h4>Time Left to Check-out:  {{minute}}.{{second}}</h4>
+            <button :disabled="disablebutton" @click="random">Continue without selecting seat</button>
         </div>
-        <b-btn class="mt-3" variant="outline-danger" block @click="hideModal">NO</b-btn>
-        <b-btn z variant="outline-success" block @click="startTimer">YES</b-btn>
-    </b-modal>
+      </div>
+      <div class="column middle">
+        <h2>Seat Plan:</h2>
+        <div v-for="(seats, index) in seatsList" :key="index">
+          <div v-if="seats != 'empty-column'"><br>
+            <div class="listSeat" v-for="seat in seats" :key="seat">
+              <button v-bind:class="{button_hidden: seat == 'e'}"  class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat[0]}}{{seat[1]}}</button><br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -48,7 +42,6 @@ export default {
       second: 0,
       minute: 3,
       duration: 0,
-      // checkout_button: false,
       disablebutton: false
     }
   },
@@ -65,29 +58,17 @@ export default {
       'totalPrice',
       'clickedButton',
       'isActive',
-      'activeModal',
       'user',
       'seat'
     ])
-  },
-  watch: {
-    activeModal (show, hide) {
-      if (hide) {
-        this.$refs.myModalRef.hide()
-      }
-      if (!show) return
-      this.$refs.myModalRef.show()
-    }
   },
   methods: {
     ...mapActions([
       'selectSeat'
     ]),
     startTimer () {
-      this.checkout_button = true
       this.duration = 0
       this.disablebutton = true
-      this.$refs.myModalRef.hide()
       setInterval(this.timer, 1000)
     },
     timer () {
@@ -110,26 +91,8 @@ export default {
     },
     random () {
       this.$store.dispatch('randomNumbers')
-      console.log(this.$store.state.randomNums[1])
-      console.log(this.$store.state.randomNums[0])
       this.$store.dispatch('randomSeat')
       this.startTimer()
-    },
-    showModal () {
-      this.$refs.myModalRef.show()
-    },
-    hideModal () {
-      let data = {
-        isActive: false,
-        seatPrice: 0,
-        fixedPrice: 8,
-        totalPrice: 0,
-        msg: 'Select a Seat...',
-        seat: '',
-        activeModal: false
-      }
-      this.$store.dispatch('changeData', data)
-      this.$refs.myModalRef.hide()
     }
   }
 }
@@ -137,12 +100,50 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.main {
+  margin: 0;
+  box-sizing: border-box;
+}
+.header {
+  padding-left: 3%;
+  margin-top: 60px;
+  text-align: left;
+}
+.header_h1 {
+  margin-left: 10%;
+  margin-top: -80px;
+}
+.column {
+  float: left;
+  padding: 10px;
+}
+.column.side {
+  width: 25%;
+}
+.column.middle {
+  width: 50%;
+}
+.row {
+  padding-left: 3%;
+  margin-top: 60px;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.bold {
+  font-weight: bold
+}
+.listSeat {
+  display: inline-block;
+}
 .button_hidden {
   visibility: hidden
 }
 .rowLetter {
-    font-weight: 800;
-    text-align: center;
+  font-weight: 800;
+  text-align: center;
 }
 .button_space {
   margin: 1em
@@ -157,24 +158,12 @@ export default {
   border-color:darkgrey;
   display: inline-block;
 }
-.button_clicked {
-    background-color: rgb(199, 42, 120);
-    border-radius: 3px;
-    height: 1em;
-    width: 1em;
-}
 h1, h2 {
   font-weight: normal;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
+@media screen and (max-width: 600px) {
+    .column.side, .column.middle {
+        width: 100%;
+    }
 }
 </style>

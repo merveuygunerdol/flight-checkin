@@ -13,7 +13,7 @@ const router = new VueRouter({
   ]
 })
 const state = {
-  msg: 'Select a Seat...',
+  msg: 'Please Select a Seat...',
   fixedPrice: 8,
   seatsList: [
     ['1A', '1B', '1C', 'e', '1D', '1E', '1F'],
@@ -112,8 +112,8 @@ const actions = {
     commit(Methods.SET_MODAL, true)
   },
   reload () {
-    router.push('checkin')
-    router.go('checkin')
+    router.push('/')
+    router.go('/')
   },
   fetchUser ({ commit }) {
     axios.get('http://localhost:3030/user/fetch')
