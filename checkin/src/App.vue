@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <img src="./assets/airline.png">
     <router-view/>
   </div>
 </template>
@@ -16,9 +15,9 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
-  margin-top: 60px;
+  /* margin-top: 60px; */
 }
 img {
   padding-bottom : 30px
