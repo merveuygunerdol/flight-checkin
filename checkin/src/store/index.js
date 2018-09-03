@@ -1,17 +1,4 @@
-import axios from 'axios'
-import VueRouter from 'vue-router'
-import Vue from 'vue'
-import checkin from '../components/checkin'
-Vue.use(VueRouter)
-const router = new VueRouter({
-  routes: [
-    {
-      path: '/checkin',
-      name: 'checkin',
-      component: checkin
-    }
-  ]
-})
+// import axios from 'axios'
 const state = {
   msg: 'Please Select a Seat...',
   fixedPrice: 8,
@@ -111,31 +98,27 @@ const actions = {
     commit(Methods.SET_MSG, 'Selected Seat:')
     commit(Methods.SET_MODAL, true)
   },
-  reload () {
-    router.push('/')
-    router.go('/')
-  },
-  fetchUser ({ commit }) {
-    axios.get('http://localhost:3030/user/fetch')
-      .then(response => {
-        this.name = response.data.name
-        let user = this.name
-        commit('SET_USER', user)
-      })
-      .catch(e => {
-        this.errors.push(e)
-      })
-  },
-  onSubmit ({ commit }, newUser) {
-    axios.post('http://localhost:3030/user/add', newUser)
-      .then((response) => {
-        console.log(response.data)
-        commit('SET_ACTIVITY', false)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  },
+  // fetchUser ({ commit }) {
+  //   axios.get('http://localhost:3030/user/fetch')
+  //     .then(response => {
+  //       this.name = response.data.name
+  //       let user = this.name
+  //       commit('SET_USER', user)
+  //     })
+  //     .catch(e => {
+  //       this.errors.push(e)
+  //     })
+  // },
+  // onSubmit ({ commit }, newUser) {
+  //   axios.post('http://localhost:3030/user/add', newUser)
+  //     .then((response) => {
+  //       console.log(response.data)
+  //       commit('SET_ACTIVITY', false)
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //     })
+  // },
   randomNumbers ({ commit }) {
     let ran1 = Math.floor(Math.random() * (5 - 1 + 1)) + 1
     let ran2 = Math.floor(Math.random() * (5 - 0 + 1)) + 1

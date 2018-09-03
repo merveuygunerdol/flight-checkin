@@ -34,8 +34,18 @@
 </template>
 
 <script>
-
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 import { mapState, mapActions } from 'vuex'
+Vue.use(VueRouter)
+const router = new VueRouter({
+  routes: [
+    {
+      path: '/',
+      name: 'checkin'
+    }
+  ]
+})
 
 export default {
   data () {
@@ -49,9 +59,9 @@ export default {
       disablebutton: false
     }
   },
-  mounted () {
-    this.$store.dispatch('fetchUser')
-  },
+  // mounted () {
+  //   this.$store.dispatch('fetchUser')
+  // },
   computed: {
     ...mapState([
       'msg',
@@ -70,6 +80,9 @@ export default {
     ...mapActions([
       'selectSeat'
     ]),
+    reload () {
+      router.go()
+    },
     startTimer () {
       this.duration = 0
       this.disablebutton = true
@@ -90,7 +103,7 @@ export default {
           this.duration++
         }
       } else {
-        this.$store.dispatch('reload')
+        this.reload()
       }
     },
     random () {
