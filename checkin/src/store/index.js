@@ -70,7 +70,6 @@ const mutations = {
     state.fixedPrice = 0
     state.seatPrice = 0
     state.totalPrice = 0
-    state.msg = 'Selected Seat:'
   },
   [Methods.SET_ACTIVITY] (state, status) {
     state.isActive = status
@@ -128,16 +127,16 @@ const actions = {
     let letter = state.cols[state.randomNums[0]]
     commit(Methods.SET_RANDOM_SEAT, state.randomNums[1] + '-' + letter)
     this.disablebutton = true
-  },
-  changeData ({ commit }, data) {
-    commit('SET_ACTIVITY', data.isActive)
-    commit('SET_SEAT_PRICE', data.seatPrice)
-    commit('SET_FIXED_PRICE', data.fixedPrice)
-    commit('SET_TOTAL_PRICE', data.totalPrice)
-    commit('SET_MSG', data.msg)
-    commit('SET_SEAT', data.seat)
-    commit('SET_MODAL', data.activeModal)
   }
+  // changeData ({ commit }, data) {
+  //   commit('SET_ACTIVITY', data.isActive)
+  //   commit('SET_SEAT_PRICE', data.seatPrice)
+  //   commit('SET_FIXED_PRICE', data.fixedPrice)
+  //   commit('SET_TOTAL_PRICE', data.totalPrice)
+  //   commit('SET_MSG', data.msg)
+  //   commit('SET_SEAT', data.seat)
+  //   commit('SET_MODAL', data.activeModal)
+  // }
 }
 
 export default {
