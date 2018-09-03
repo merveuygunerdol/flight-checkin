@@ -24,7 +24,7 @@ const state = {
 const getters = {}
 
 const Methods = {
-  SET_BUTTON: 'SET_BUTTON',
+  SET_SELECTED_SEAT: 'SET_SELECTED_SEAT',
   SET_TOTAL_PRICE: 'SET_TOTAL_PRICE',
   SET_MSG: 'SET_MSG',
   SET_SEAT_PRICE: 'SET_SEAT_PRICE',
@@ -41,8 +41,8 @@ const mutations = {
   [Methods.SET_RANDOM_NUMS] (state, nums) {
     state.randomNums = [nums[0], nums[1]]
   },
-  [Methods.SET_BUTTON] (state, button) {
-    state.selectedSeat = button
+  [Methods.SET_SELECTED_SEAT] (state, seat) {
+    state.selectedSeat = seat
   },
   [Methods.SET_TOTAL_PRICE] (state, totalp) {
     state.totalPrice = totalp
@@ -78,7 +78,7 @@ const mutations = {
 const actions = {
   selectSeat ({commit}, selectedSeat) {
     commit(Methods.SET_ACTIVITY, true)
-    commit(Methods.SET_BUTTON, selectedSeat)
+    commit(Methods.SET_SELECTED_SEAT, selectedSeat)
     const priceMap = {
       A: 10,
       B: 5,
@@ -128,15 +128,6 @@ const actions = {
     commit(Methods.SET_RANDOM_SEAT, state.randomNums[1] + '-' + letter)
     this.disablebutton = true
   }
-  // changeData ({ commit }, data) {
-  //   commit('SET_ACTIVITY', data.isActive)
-  //   commit('SET_SEAT_PRICE', data.seatPrice)
-  //   commit('SET_FIXED_PRICE', data.fixedPrice)
-  //   commit('SET_TOTAL_PRICE', data.totalPrice)
-  //   commit('SET_MSG', data.msg)
-  //   commit('SET_SEAT', data.seat)
-  //   commit('SET_MODAL', data.activeModal)
-  // }
 }
 
 export default {
