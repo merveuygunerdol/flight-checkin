@@ -1,8 +1,12 @@
 <template>
-  <div class="main">
+  <div class="container">
     <div class="header">
-      <img src="../assets/airline.png">
-      <h1 class="header_h1">Welcome to HelloAirlines Checkin Service! </h1>
+      <div class="logo">
+        <img src="../assets/airline.png">
+      </div>
+      <div class="header__title">
+      <h1>Welcome to HelloAirlines Checkin Service! </h1>
+      </div>
     </div>
     <div class="row">
       <div class="column side">
@@ -100,18 +104,24 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.main {
+.container {
   margin: 0;
   box-sizing: border-box;
+  display: grid;
 }
 .header {
   padding-left: 3%;
   margin-top: 60px;
-  text-align: left;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  grid-gap: 10px
 }
-.header_h1 {
-  margin-left: 10%;
-  margin-top: -80px;
+.logo {
+  grid-column: span 1;
+}
+.header__title {
+  grid-column: span 5;
 }
 .column {
   float: left;
@@ -145,9 +155,6 @@ export default {
   font-weight: 800;
   text-align: center;
 }
-.button_space {
-  margin: 1em
-}
 .button {
   background-color: rgb(179, 184, 189);
   border-radius: 3px;
@@ -155,10 +162,15 @@ export default {
   width: 25px;
   color: white;
   margin: 8px 8px 0;
+  padding: 0;
+  border:0;
   border-color:darkgrey;
   display: inline-block;
 }
-h1, h2 {
+h1 {
+  font-weight: bold;
+}
+h2 {
   font-weight: normal;
 }
 @media screen and (max-width: 600px) {
