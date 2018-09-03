@@ -13,7 +13,7 @@ const state = {
   cols: ['A', 'B', 'C', 'D', 'E', 'F'],
   seatPrice: 0,
   totalPrice: 0,
-  clickedButton: '',
+  selectedSeat: '',
   isActive: false,
   activeModal: false,
   user: '',
@@ -42,7 +42,7 @@ const mutations = {
     state.randomNums = [nums[0], nums[1]]
   },
   [Methods.SET_BUTTON] (state, button) {
-    state.clickedButton = button
+    state.selectedSeat = button
   },
   [Methods.SET_TOTAL_PRICE] (state, totalp) {
     state.totalPrice = totalp
@@ -79,15 +79,15 @@ const actions = {
   selectSeat ({commit}, selectedSeat) {
     commit(Methods.SET_ACTIVITY, true)
     commit(Methods.SET_BUTTON, selectedSeat)
-    if (selectedSeat[1] == 'A' || selectedSeat[1] == 'F') {
-      commit(Methods.SET_SEAT_PRICE, 10)
+    const priceMap = {
+      A: 10,
+      B: 5,
+      C: 8,
+      D: 8,
+      E: 5,
+      F: 10
     }
-    if (selectedSeat[1] == 'C' || selectedSeat[1] == 'D') {
-      commit(Methods.SET_SEAT_PRICE, 8)
-    }
-    if (selectedSeat[1] == 'B' || selectedSeat[1] == 'E') {
-      commit(Methods.SET_SEAT_PRICE, 5)
-    }
+    commit(Methods.SET_SEAT_PRICE, priceMap[selectedSeat[1]])
     if (selectedSeat[2]) {
       commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2])
     } else {

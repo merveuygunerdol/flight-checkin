@@ -51,7 +51,6 @@ export default {
   data () {
     return {
       name: '',
-      selectedSeat: '',
       email: '',
       second: 0,
       minute: 3,
@@ -70,7 +69,7 @@ export default {
       'seats',
       'seatPrice',
       'totalPrice',
-      'clickedButton',
+      'selectedSeat',
       'isActive',
       'user',
       'seat'
