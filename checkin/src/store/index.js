@@ -18,9 +18,16 @@ const state = {
   activeModal: false,
   user: '',
   randomNums: [],
-  seat: ''
+  seat: '',
+  priceMap: {
+    A: 10,
+    B: 5,
+    C: 8,
+    D: 8,
+    E: 5,
+    F: 10
+  }
 }
-
 const getters = {}
 
 const Methods = {
@@ -79,23 +86,15 @@ const actions = {
   selectSeat ({commit}, selectedSeat) {
     commit(Methods.SET_ACTIVITY, true)
     commit(Methods.SET_SELECTED_SEAT, selectedSeat)
-    const priceMap = {
-      A: 10,
-      B: 5,
-      C: 8,
-      D: 8,
-      E: 5,
-      F: 10
-    }
-    commit(Methods.SET_SEAT_PRICE, priceMap[selectedSeat[1]])
+    commit(Methods.SET_TOTAL_PRICE, state.seatPrice + state.fixedPrice)
+    commit(Methods.SET_MSG, 'Selected Seat:')
+    commit(Methods.SET_MODAL, true)
+    commit(Methods.SET_SEAT_PRICE, state.priceMap[selectedSeat[1]])
     if (selectedSeat[2]) {
       commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2])
     } else {
       commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1])
     }
-    commit(Methods.SET_TOTAL_PRICE, state.seatPrice + state.fixedPrice)
-    commit(Methods.SET_MSG, 'Selected Seat:')
-    commit(Methods.SET_MODAL, true)
   },
   // fetchUser ({ commit }) {
   //   axios.get('http://localhost:3030/user/fetch')
