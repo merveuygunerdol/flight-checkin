@@ -26,7 +26,9 @@ const state = {
     D: 8,
     E: 5,
     F: 10
-  }
+  },
+  ran1: Math.floor(Math.random() * (5 - 1 + 1)) + 1,
+  ran2: Math.floor(Math.random() * (5 - 0 + 1)) + 1
 }
 const getters = {}
 
@@ -96,6 +98,12 @@ const actions = {
       commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1])
     }
   },
+  random ({commit}, randomNums) {
+    commit(Methods.SET_RANDOM_NUMS, [state.ran1, state.ran2])
+    let letter = state.cols[state.randomNums[0]]
+    commit(Methods.SET_RANDOM_SEAT, state.randomNums[1] + '-' + letter)
+    commit(Methods.SET_MSG, 'Selected Seat:')
+  }
   // fetchUser ({ commit }) {
   //   axios.get('http://localhost:3030/user/fetch')
   //     .then(response => {
@@ -117,16 +125,6 @@ const actions = {
   //       console.log(error)
   //     })
   // },
-  randomNumbers ({ commit }) {
-    let ran1 = Math.floor(Math.random() * (5 - 1 + 1)) + 1
-    let ran2 = Math.floor(Math.random() * (5 - 0 + 1)) + 1
-    commit(Methods.SET_RANDOM_NUMS, [ran1, ran2])
-  },
-  randomSeat ({ commit }, randomNums) {
-    let letter = state.cols[state.randomNums[0]]
-    commit(Methods.SET_RANDOM_SEAT, state.randomNums[1] + '-' + letter)
-    this.disablebutton = true
-  }
 }
 
 export default {

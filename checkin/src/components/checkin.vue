@@ -15,8 +15,8 @@
         <span class="bold">Check-in Price: </span> {{fixedPrice}} €<br>
         <span class="bold">Total Price: </span>{{totalPrice}} €<br>
         <div>
-          <h4>Time Left to Check-out:  {{minute}}.{{second}}</h4>
-            <button :disabled="disablebutton" @click="random">Continue without selecting seat</button>
+          <h4>Time Left to Check-in:  {{minute}}.{{second}}</h4>
+            <button :disabled="disablebutton" @click="random() + startTimer()">Continue without selecting seat</button>
         </div>
       </div>
       <div class="column middle">
@@ -24,7 +24,7 @@
         <div v-for="(seats, index) in seatsList" :key="index">
           <div v-if="seats != 'empty-column'"><br>
             <div class="listSeat" v-for="seat in seats" :key="seat">
-              <button v-bind:class="{button_hidden: seat == 'e'}"  class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat}}</button><br>
+              <button v-bind:class="{button_hidden: seat == 'e'}"  class="button" :disabled="disablebutton"  @click="selectSeat(seat) + startTimer()">{{seat}}</button><br>
             </div>
           </div>
         </div>
@@ -77,7 +77,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'selectSeat'
+      'selectSeat',
+      'random'
     ]),
     reload () {
       router.go()
@@ -88,29 +89,23 @@ export default {
       setInterval(this.timer, 1000)
     },
     timer () {
-      if (this.duration < 180) {
-        if (this.second == 0) {
-          this.minute = this.minute - 1
+      if (this.duration >= 180) return this.reload()
+      if (this.second == 0) {
+        this.minute = this.minute - 1
+        this.second = 59
+        if (this.minute == -1) {
+          this.minute = 2
           this.second = 59
-          if (this.minute == -1) {
-            this.minute = 2
-            this.second = 59
-          }
-          this.duration++
-        } else {
-          this.second -= 1
-          this.duration++
         }
+        this.duration++
       } else {
-        this.reload()
+        this.second -= 1
+        this.duration++
       }
-    },
-    random () {
-      this.$store.dispatch('randomNumbers')
-      this.$store.dispatch('randomSeat')
-      this.$store.state.msg = 'Selected Seat: '
-      this.startTimer()
     }
+    // random () {
+    //   // this.startTimer()
+    // }
   }
 }
 </script>
