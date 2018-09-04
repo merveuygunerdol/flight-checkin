@@ -13,18 +13,25 @@ const state = {
   cols: ['A', 'B', 'C', 'D', 'E', 'F'],
   seatPrice: 0,
   totalPrice: 0,
-  clickedButton: '',
+  selectedSeat: '',
   isActive: false,
   activeModal: false,
   user: '',
   randomNums: [],
-  seat: ''
+  seat: '',
+  priceMap: {
+    A: 10,
+    B: 5,
+    C: 8,
+    D: 8,
+    E: 5,
+    F: 10
+  }
 }
-
 const getters = {}
 
 const Methods = {
-  SET_BUTTON: 'SET_BUTTON',
+  SET_SELECTED_SEAT: 'SET_SELECTED_SEAT',
   SET_TOTAL_PRICE: 'SET_TOTAL_PRICE',
   SET_MSG: 'SET_MSG',
   SET_SEAT_PRICE: 'SET_SEAT_PRICE',
@@ -41,8 +48,8 @@ const mutations = {
   [Methods.SET_RANDOM_NUMS] (state, nums) {
     state.randomNums = [nums[0], nums[1]]
   },
-  [Methods.SET_BUTTON] (state, button) {
-    state.clickedButton = button
+  [Methods.SET_SELECTED_SEAT] (state, seat) {
+    state.selectedSeat = seat
   },
   [Methods.SET_TOTAL_PRICE] (state, totalp) {
     state.totalPrice = totalp
@@ -70,7 +77,6 @@ const mutations = {
     state.fixedPrice = 0
     state.seatPrice = 0
     state.totalPrice = 0
-    state.msg = 'Selected Seat:'
   },
   [Methods.SET_ACTIVITY] (state, status) {
     state.isActive = status
@@ -79,24 +85,16 @@ const mutations = {
 const actions = {
   selectSeat ({commit}, selectedSeat) {
     commit(Methods.SET_ACTIVITY, true)
-    commit(Methods.SET_BUTTON, selectedSeat)
-    if (selectedSeat[1] == 'A' || selectedSeat[1] == 'F') {
-      commit(Methods.SET_SEAT_PRICE, 10)
-    }
-    if (selectedSeat[1] == 'C' || selectedSeat[1] == 'D') {
-      commit(Methods.SET_SEAT_PRICE, 8)
-    }
-    if (selectedSeat[1] == 'B' || selectedSeat[1] == 'E') {
-      commit(Methods.SET_SEAT_PRICE, 5)
-    }
+    commit(Methods.SET_SELECTED_SEAT, selectedSeat)
+    commit(Methods.SET_TOTAL_PRICE, state.seatPrice + state.fixedPrice)
+    commit(Methods.SET_MSG, 'Selected Seat:')
+    commit(Methods.SET_MODAL, true)
+    commit(Methods.SET_SEAT_PRICE, state.priceMap[selectedSeat[1]])
     if (selectedSeat[2]) {
       commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2])
     } else {
       commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1])
     }
-    commit(Methods.SET_TOTAL_PRICE, state.seatPrice + state.fixedPrice)
-    commit(Methods.SET_MSG, 'Selected Seat:')
-    commit(Methods.SET_MODAL, true)
   },
   // fetchUser ({ commit }) {
   //   axios.get('http://localhost:3030/user/fetch')
@@ -128,15 +126,6 @@ const actions = {
     let letter = state.cols[state.randomNums[0]]
     commit(Methods.SET_RANDOM_SEAT, state.randomNums[1] + '-' + letter)
     this.disablebutton = true
-  },
-  changeData ({ commit }, data) {
-    commit('SET_ACTIVITY', data.isActive)
-    commit('SET_SEAT_PRICE', data.seatPrice)
-    commit('SET_FIXED_PRICE', data.fixedPrice)
-    commit('SET_TOTAL_PRICE', data.totalPrice)
-    commit('SET_MSG', data.msg)
-    commit('SET_SEAT', data.seat)
-    commit('SET_MODAL', data.activeModal)
   }
 }
 

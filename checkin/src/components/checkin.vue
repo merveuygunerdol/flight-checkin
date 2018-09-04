@@ -24,7 +24,7 @@
         <div v-for="(seats, index) in seatsList" :key="index">
           <div v-if="seats != 'empty-column'"><br>
             <div class="listSeat" v-for="seat in seats" :key="seat">
-              <button v-bind:class="{button_hidden: seat == 'e'}"  class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat[0]}}{{seat[1]}}</button><br>
+              <button v-bind:class="{button_hidden: seat == 'e'}"  class="button" :disabled="disablebutton"  @click="selectSeat(seat)">{{seat}}</button><br>
             </div>
           </div>
         </div>
@@ -51,7 +51,6 @@ export default {
   data () {
     return {
       name: '',
-      selectedSeat: '',
       email: '',
       second: 0,
       minute: 3,
@@ -70,7 +69,7 @@ export default {
       'seats',
       'seatPrice',
       'totalPrice',
-      'clickedButton',
+      'selectedSeat',
       'isActive',
       'user',
       'seat'
@@ -109,6 +108,7 @@ export default {
     random () {
       this.$store.dispatch('randomNumbers')
       this.$store.dispatch('randomSeat')
+      this.$store.state.msg = 'Selected Seat: '
       this.startTimer()
     }
   }
