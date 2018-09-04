@@ -16,16 +16,14 @@
         <span class="bold">Total Price: </span>{{totalPrice}} €<br>
         <div>
           <h4>Time Left to Check-in:  {{minute}}.{{second}}</h4>
-            <button :disabled="disablebutton" @click="random() + startTimer()">Continue without selecting seat</button>
+            <button :disabled="button__disable" @click="random() + startTimer()">Continue without selecting seat</button>
         </div>
       </div>
       <div class="column middle">
         <h2>Seat Plan:</h2>
-        <div v-for="(seats, index) in seatsList" :key="index">
-          <div v-if="seats != 'empty-column'"><br>
-            <div class="listSeat" v-for="seat in seats" :key="seat">
-              <button v-bind:class="{button_hidden: seat == 'e'}"  class="button" :disabled="disablebutton"  @click="selectSeat(seat) + startTimer()">{{seat}}</button><br>
-            </div>
+        <div v-for="(row, index) in seatsList" :key="index"> <br>
+          <div class="listSeat" v-for="seat in row" :key="seat">
+            <button v-bind:class="{ button__hidden: seat == 'e'}"  class="button" :disabled="button__disable"  @click="selectSeat(seat)">{{seat}}</button><br>
           </div>
         </div>
       </div>
@@ -55,7 +53,7 @@ export default {
       second: 0,
       minute: 3,
       duration: 0,
-      disablebutton: false
+      button__disable: false
     }
   },
   // mounted () {
@@ -85,7 +83,7 @@ export default {
     },
     startTimer () {
       this.duration = 0
-      this.disablebutton = true
+      this.button__disable = true
       setInterval(this.timer, 1000)
     },
     timer () {
@@ -156,7 +154,7 @@ export default {
 .listSeat {
   display: inline-block;
 }
-.button_hidden {
+.button__hidden {
   visibility: hidden
 }
 .rowLetter {
