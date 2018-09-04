@@ -16,14 +16,14 @@
         <span class="bold">Total Price: </span>{{totalPrice}} €<br>
         <div>
           <h4>Time Left to Check-in:  {{minute}}.{{second}}</h4>
-            <button :disabled="button__disable" @click="random() + startTimer()">Continue without selecting seat</button>
+            <button :disabled="buttonDisabled" @click="random() + startTimer()">Continue without selecting seat</button>
         </div>
       </div>
       <div class="column middle">
         <h2>Seat Plan:</h2>
         <div v-for="(row, index) in seatsList" :key="index"> <br>
           <div class="listSeat" v-for="seat in row" :key="seat">
-            <button v-bind:class="{ button__hidden: seat == 'e'}"  class="button" :disabled="button__disable"  @click="selectSeat(seat)">{{seat}}</button><br>
+            <button v-bind:class="{ buttonHidden: seat == 'e'}"  class="button" :disabled="buttonDisabled"  @click="selectSeat(seat) + startTimer()">{{seat}}</button><br>
           </div>
         </div>
       </div>
@@ -53,7 +53,7 @@ export default {
       second: 0,
       minute: 3,
       duration: 0,
-      button__disable: false
+      buttonDisabled: false
     }
   },
   // mounted () {
@@ -83,7 +83,7 @@ export default {
     },
     startTimer () {
       this.duration = 0
-      this.button__disable = true
+      this.buttonDisabled = true
       setInterval(this.timer, 1000)
     },
     timer () {
@@ -101,9 +101,6 @@ export default {
         this.duration++
       }
     }
-    // random () {
-    //   // this.startTimer()
-    // }
   }
 }
 </script>
@@ -154,7 +151,7 @@ export default {
 .listSeat {
   display: inline-block;
 }
-.button__hidden {
+.buttonHidden {
   visibility: hidden
 }
 .rowLetter {
