@@ -15,7 +15,6 @@ const state = {
   totalPrice: 0,
   selectedSeat: '',
   isActive: false,
-  activeModal: false,
   user: '',
   randomNums: [],
   seat: '',
@@ -34,16 +33,13 @@ const getters = {}
 
 const Methods = {
   SET_DATA: 'SET_DATA',
-  SET_SELECTED_SEAT: 'SET_SELECTED_SEAT',
   SET_TOTAL_PRICE: 'SET_TOTAL_PRICE',
   SET_MSG: 'SET_MSG',
   SET_SEAT_PRICE: 'SET_SEAT_PRICE',
   SET_SEAT: 'SET_SEAT',
   SET_USER: 'SET_USER',
   SET_FIXED_PRICE: 'SET_FIXED_PRICE',
-  SET_MODAL: 'SET_MODAL',
   SET_RANDOM_SEAT: 'SET_RANDOM_SEAT',
-  SET_ACTIVITY: 'SET_ACTIVITY',
   SET_RANDOM_NUMS: 'SET_RANDOM_NUMS'
 }
 
@@ -66,9 +62,6 @@ const mutations = {
   [Methods.SET_SEAT] (state, selectedSeat) {
     state.seat = selectedSeat
   },
-  [Methods.SET_USER] (state, user) {
-    state.user = user
-  },
   [Methods.SET_FIXED_PRICE] (state, fixedPrice) {
     state.fixedPrice = fixedPrice
   },
@@ -81,16 +74,16 @@ const mutations = {
 }
 const actions = {
   selectSeat ({commit}, selectedSeat) {
-    commit(Methods.SET_DATA, 'SET_ACTIVITY', true)
-    commit(Methods.SET_DATA, 'SET_SELECTED_SEAT', selectedSeat)
-    commit(Methods.SET_TOTAL_PRICE, state.seatPrice + state.fixedPrice)
-    commit(Methods.SET_MSG, 'Selected Seat:')
+    commit(Methods.SET_DATA, 'isActive', true)
+    commit(Methods.SET_DATA, 'selectedSeat', selectedSeat)
+    commit(Methods.SET_DATA, 'msg', 'Selected Seat:')
     commit(Methods.SET_SEAT_PRICE, state.priceMap[selectedSeat[1]])
     if (selectedSeat[2]) {
-      commit(Methods.SET_DATA, 'SET_SEAT', selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2])
+      commit(Methods.SET_DATA, 'seat', selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2])
     } else {
       commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1])
     }
+    commit(Methods.SET_TOTAL_PRICE, state.seatPrice + state.fixedPrice)
   },
   random ({commit}, randomNums) {
     commit(Methods.SET_RANDOM_NUMS, [state.ran1, state.ran2])
