@@ -23,10 +23,7 @@ const state = {
     D: 8,
     E: 5,
     F: 10
-  },
-  ran1: Math.floor(Math.random() * (5 - 1 + 1)) + 1,
-  ran2: Math.floor(Math.random() * (5 - 0 + 1)) + 1,
-  randomNums: []
+  }
 }
 const getters = {}
 
@@ -40,19 +37,21 @@ const mutations = {
     state[key] = value
   },
   [Methods.SET_RANDOM_SEAT] (state) {
-    state.randomNums = [state.ran1, state.ran2]
-    let letter = state.cols[state.randomNums[0]]
+    let ran1 = Math.floor(Math.random() * (5 - 1 + 1)) + 1
+    let ran2 = Math.floor(Math.random() * (5 - 0 + 1)) + 1
+    let randomNums = [ran1, ran2]
+    let letter = state.cols[randomNums[0]]
     state.fixedPrice = 0
     state.seatPrice = 0
     state.totalPrice = 0
-    let randomSeat = state.randomNums[1] + '-' + letter
+    let randomSeat = randomNums[1] + '-' + letter
     state.seat = randomSeat
   }
 }
 const actions = {
   selectSeat ({commit}, selectedSeat) {
-    commit(Methods.SET_DATA, 'isActive', true)
-    commit(Methods.SET_DATA, 'selectedSeat', selectedSeat)
+    commit(Methods.SET_DATA, { key: 'isActive', value: true })
+    commit(Methods.SET_DATA, { key: 'selectedSeat', value: selectedSeat })
     commit(Methods.SET_DATA, { key: 'msg', value: 'Selected Seat:' })
     commit(Methods.SET_DATA, { key: 'seatPrice', value: state.priceMap[selectedSeat[1]] })
     if (selectedSeat[2]) {
