@@ -15,8 +15,6 @@ const state = {
   totalPrice: 0,
   selectedSeat: '',
   isActive: false,
-  user: '',
-  randomNums: [],
   seat: '',
   priceMap: {
     A: 10,
@@ -27,69 +25,46 @@ const state = {
     F: 10
   },
   ran1: Math.floor(Math.random() * (5 - 1 + 1)) + 1,
-  ran2: Math.floor(Math.random() * (5 - 0 + 1)) + 1
+  ran2: Math.floor(Math.random() * (5 - 0 + 1)) + 1,
+  randomNums: []
 }
 const getters = {}
 
 const Methods = {
   SET_DATA: 'SET_DATA',
-  SET_TOTAL_PRICE: 'SET_TOTAL_PRICE',
-  SET_MSG: 'SET_MSG',
-  SET_SEAT_PRICE: 'SET_SEAT_PRICE',
-  SET_SEAT: 'SET_SEAT',
-  SET_USER: 'SET_USER',
-  SET_FIXED_PRICE: 'SET_FIXED_PRICE',
-  SET_RANDOM_SEAT: 'SET_RANDOM_SEAT',
-  SET_RANDOM_NUMS: 'SET_RANDOM_NUMS'
+  SET_RANDOM_SEAT: 'SET_RANDOM_SEAT'
 }
 
 const mutations = {
-  [Methods.SET_DATA] (state, key, value) {
+  [Methods.SET_DATA] (state, {key, value}) {
     state[key] = value
   },
-  [Methods.SET_RANDOM_NUMS] (state, nums) {
-    state.randomNums = [nums[0], nums[1]]
-  },
-  [Methods.SET_TOTAL_PRICE] (state, totalp) {
-    state.totalPrice = totalp
-  },
-  [Methods.SET_MSG] (state, msg) {
-    state.msg = msg
-  },
-  [Methods.SET_SEAT_PRICE] (state, seatp) {
-    state.seatPrice = seatp
-  },
-  [Methods.SET_SEAT] (state, selectedSeat) {
-    state.seat = selectedSeat
-  },
-  [Methods.SET_FIXED_PRICE] (state, fixedPrice) {
-    state.fixedPrice = fixedPrice
-  },
-  [Methods.SET_RANDOM_SEAT] (state, seat) {
-    state.seat = seat
+  [Methods.SET_RANDOM_SEAT] (state) {
+    state.randomNums = [state.ran1, state.ran2]
+    let letter = state.cols[state.randomNums[0]]
     state.fixedPrice = 0
     state.seatPrice = 0
     state.totalPrice = 0
+    let randomSeat = state.randomNums[1] + '-' + letter
+    state.seat = randomSeat
   }
 }
 const actions = {
   selectSeat ({commit}, selectedSeat) {
     commit(Methods.SET_DATA, 'isActive', true)
     commit(Methods.SET_DATA, 'selectedSeat', selectedSeat)
-    commit(Methods.SET_DATA, 'msg', 'Selected Seat:')
-    commit(Methods.SET_SEAT_PRICE, state.priceMap[selectedSeat[1]])
+    commit(Methods.SET_DATA, { key: 'msg', value: 'Selected Seat:' })
+    commit(Methods.SET_DATA, { key: 'seatPrice', value: state.priceMap[selectedSeat[1]] })
     if (selectedSeat[2]) {
-      commit(Methods.SET_DATA, 'seat', selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2])
+      commit(Methods.SET_DATA, { key: 'seat', value: selectedSeat[0] + '-' + selectedSeat[1] + selectedSeat[2] })
     } else {
-      commit(Methods.SET_SEAT, selectedSeat[0] + '-' + selectedSeat[1])
+      commit(Methods.SET_DATA, { key: 'seat', value: selectedSeat[0] + '-' + selectedSeat[1] })
     }
-    commit(Methods.SET_TOTAL_PRICE, state.seatPrice + state.fixedPrice)
+    commit(Methods.SET_DATA, { key: 'totalPrice', value: state.seatPrice + state.fixedPrice })
   },
-  random ({commit}, randomNums) {
-    commit(Methods.SET_RANDOM_NUMS, [state.ran1, state.ran2])
-    let letter = state.cols[state.randomNums[0]]
-    commit(Methods.SET_RANDOM_SEAT, state.randomNums[1] + '-' + letter)
-    commit(Methods.SET_MSG, 'Selected Seat:')
+  random ({commit}) {
+    commit(Methods.SET_RANDOM_SEAT)
+    commit(Methods.SET_DATA, { key: 'msg', value: 'Selected Seat:' })
   }
   // fetchUser ({ commit }) {
   //   axios.get('http://localhost:3030/user/fetch')
