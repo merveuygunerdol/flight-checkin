@@ -1,4 +1,4 @@
-// import axios from 'axios'
+import axios from 'axios'
 const state = {
   msg: 'Please Select a Seat...',
   fixedPrice: 8,
@@ -60,6 +60,14 @@ const actions = {
       commit(Methods.SET_DATA, { key: 'seat', value: selectedSeat[0] + '-' + selectedSeat[1] })
     }
     commit(Methods.SET_DATA, { key: 'totalPrice', value: state.seatPrice + state.fixedPrice })
+    axios.post('http://localhost:3000/seat-plan', selectedSeat)
+      .then((response) => {
+        console.log(response.data)
+        commit('SET_DATA', selectedSeat)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   },
   random ({commit}) {
     commit(Methods.SET_RANDOM_SEAT)

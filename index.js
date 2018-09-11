@@ -3,14 +3,24 @@ const cors = require('cors');
 const bodyparser = require('body-parser');
 const app = express();
 
-require('./database-connection');
+require('./database-connection.js')
+
 app.use(cors());
 app.use(bodyparser.json());
 
-const user = require('./routes/user');
+const flight = require('./routes/flight.js');
 
-app.use('/user', user);
+app.use('/', flight)
 
-app.listen(3030, () => {
-    console.log('Server Listening');
-});
+app.get('/', (req, res, next) => {
+    res.send('hello')
+})
+
+app.get('/seat-plan', (req, res, next) => {
+    res.send('hello')
+})
+
+app.listen(3000, () => {
+console.log('merve rocks bu proje bitecek')
+})
+
