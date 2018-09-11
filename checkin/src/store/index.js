@@ -60,10 +60,16 @@ const actions = {
       commit(Methods.SET_DATA, { key: 'seat', value: selectedSeat[0] + '-' + selectedSeat[1] })
     }
     commit(Methods.SET_DATA, { key: 'totalPrice', value: state.seatPrice + state.fixedPrice })
-    axios.post('http://localhost:3000/seat-plan', selectedSeat)
+    let Seat = {
+      column: selectedSeat[1],
+      number: selectedSeat[0],
+      price: state.seatPrice,
+      reserved: true
+    }
+    axios.post('http://localhost:3000/seat-plan', Seat)
       .then((response) => {
         console.log(response.data)
-        commit('SET_DATA', selectedSeat)
+        commit('SET_DATA', Seat)
       })
       .catch((error) => {
         console.log(error)

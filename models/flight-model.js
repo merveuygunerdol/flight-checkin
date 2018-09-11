@@ -2,9 +2,21 @@ const mongoose = require('mongoose');
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const flightSchema = mongoose.Schema({
-  seatPlan: {
+  column: {
     type: String,
-    required:  true,
+    required: true,
+  },
+  number: {
+    type: Number,
+    // required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  reserved: {
+    type: Boolean,
+    // required: true,
   },
 })
 flightSchema.plugin(AutoIncrement, { inc_field: 'id' });

@@ -1,10 +1,10 @@
 const fs = require('fs');
-const FlightModel = require('../models/flight-model.js')
+const FlightModel = require('../models/flight-model')
 
-async function add(seatPlan) {
+async function chooseSeat(seatPlan) {
   return FlightModel.create(seatPlan);
 }
 
 module.exports = {
-  add
+  chooseSeat
 }
